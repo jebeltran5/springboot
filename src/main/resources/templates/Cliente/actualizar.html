@@ -1,0 +1,30 @@
+<div th:insert="~{header}"></div>
+<h1>Formulario de Actualizar de Cliente</h1>
+<div class="container">
+	<form th:action="@{/Cliente/guardar} " th:object="${cliente}" method="POST">
+		<div class="row">
+			<div class="col-md-6">
+				<label>nombre del Cliente</label>
+				<input type="hidden" th:field="*{id}" id="id" required/>
+				<input type="text" th:field="*{nombre}" id="nombre" class="form-control" required>
+			</div>
+			<div class="col-md-6">
+            <label>Direccion del Cliente</label>
+				<input type="text" th:field="*{direccion}" id="direccion" class="form-control" required>
+			</div>
+			<div class="row">
+			<div class="col-md-6">
+				<label>Cedula del Cliente</label>
+				<input type="number" th:field="*{cedula}" id="cedula" class="form-control" required>
+			</div>
+			<div class="col-md-6">
+            <label>Telefono del Cliente</label>
+				<input type="number" th:field="*{telefono}" id="telefono" class="form-control" required>
+			</div>
+		</div><br><br>
+		<div class="centrarboton">
+		<input type="submit" value="Actualizar Cliente" class="btn btn-outline-success">
+		</div>
+	</form>
+</div>
+<div th:insert="~{footer}"></div>

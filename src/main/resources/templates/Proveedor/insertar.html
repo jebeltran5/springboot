@@ -1,0 +1,27 @@
+<div th:insert="~{header}"></div>
+
+<h1>Formulario de Registro de Proveedor</h1>
+<div class="container">
+	<form th:action="@{/Proveedor/guardar} " th:object="${proveedor}" method="POST">
+		<div class="row">
+			<div class="col-md-4">
+				<label>nombre del proveedor</label>
+				<input type="text" th:field="*{nombre}" id="nombre" class="form-control" required>
+			</div>
+			<div class="col-md-4">
+            <label>Direccion del proveedor</label>
+				<input type="text" th:field="*{direccion}" id="direccion" class="form-control" required>
+			</div>
+			<div class="col-md-4">
+              <label>Celular del proveedor</label>
+				<input type="number" th:field="*{celular}" id="celular" class="form-control" required>
+			</div>
+		</div><br><br>
+		<div class="centrarboton">
+		<input type="submit" value="Guardar Proveedor" class="btn btn-outline-success">
+		</div>
+	</form>
+</div>
+
+
+<div th:insert="~{footer}"></div>

@@ -1,0 +1,42 @@
+<div th:insert="~{header}"></div>
+
+<h1>Formulario de Registro de un Producto</h1>
+<div class="container">
+	<form th:action="@{/Producto/guardar} " th:object="${producto}" method="POST">
+		<div class="row">
+			<div class="col-md-6">
+				<label>Nombre del producto</label>
+				<input type="hidden" th:field="*{id}" required>
+				<input type="text" th:field="*{nombre}" id="nombre" class="form-control" required>
+			</div>
+			<div class="col-md-6">
+				<label>Descripcion del producto</label>
+				<input type="text" th:field="*{descripcion}" id="descripcion" class="form-control" required>
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<label>Valor del producto</label>
+				<input type="number" th:field="*{valor}" id="valor" class="form-control" required>
+			</div>
+			<div class="col-md-3">
+				<label>Cantidad del producto</label>
+				<input type="number" th:field="*{cantidad}" id="cantidad" class="form-control" required>
+			</div>
+			<div class="col-md-3">
+				<label>Fecha de Ingreso del Producto</label>
+				<input type="date" th:field="*{fecha}" id="fecha" class="form-control" required>
+			</div>
+			<div class="col-md-3">
+				<label>selecione un proveedor</label>
+				<select name="proveedor" th:field="*{proveedor.id}" class="form-control">
+					<option th:each="p : ${proveedor}" th:value="${p.id}" th:text="${p.nombre}" ></option>
+				</select>
+			</div>
+		</div>
+		<br><br>
+		<div class="centrarboton">
+		<input type="submit" value="Guardar Producto" class="btn btn-outline-success">
+		</div>
+	</form>
+<div th:insert="~{footer}"></div>

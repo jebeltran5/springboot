@@ -1,0 +1,68 @@
+<div th:insert="~{header}"></div>
+
+<h1>Listado de Factura</h1>
+<div class="container">
+	<table class="table table-success">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Fecha Factura</th>
+				<th>total de la factura</th>
+				<th>Nombre del cliente</th>
+				<th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="f:${factura}">
+				<td th:text="${f.id}"></td>
+				<td th:text="${f.fecha}"></td>
+				<td th:text="${f.total}"></td>
+				<td th:text="${f.cliente.nombre}"></td>
+				<td>
+					<!--		<a th:href="|/Proveedor/borrar/${p.id}|"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+					<a th:href="|/Factura/actualizar/${f.id}|"><i class="fa fa-pencil-square-o"
+							aria-hidden="true"></i></a>
+					<i th:onclick="borrar('[[${f.id}]]')" class="fa fa-trash" aria-hidden="true"></i>
+				<a th:href="|/Factura/imprimir/${f.id}|" ><i class="fa fa-file-pdf-o" aria-hidden="true" ></i></a>	
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<script>
+	function borrar(id) {
+		const swalWithBootstrapButtons = Swal.mixin({
+			customClass: {
+				confirmButton: "btn btn-success",
+				cancelButton: "btn btn-danger"
+			},
+			buttonsStyling: false
+		});
+		swalWithBootstrapButtons.fire({
+			title: "esta seguro que desea borrar este cliente",
+			text: "si se borra no podra recuperar el registro",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonText: "borrar factura!",
+			cancelButtonText: "cancelar accion!",
+			reverseButtons: true
+		}).then((result) => {
+			if (result.isConfirmed) {
+			      //Redireccion
+			   location.href = "/Factura/borrar/" + id;
+			      
+			} else if (
+				/* Read more about handling dismissals below */
+				result.dismiss === Swal.DismissReason.cancel
+			) {
+				swalWithBootstrapButtons.fire({
+					title: "Cancelado",
+					text: "el registro no sera borrado :)",
+					icon: "error"
+				});
+			}
+		});
+	}
+</script>
+<div th:insert="~{footer}"></div>

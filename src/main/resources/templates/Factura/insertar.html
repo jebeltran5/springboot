@@ -1,0 +1,150 @@
+<div th:insert="~{header}"></div>
+
+<h1>Formulario de Registro de Factura</h1>
+<div class="container">
+	<form th:action="@{/Factura/guardar}" method="POST">
+		<div class="row">
+			<div class="col-md-6">
+				<label>Fecha Actual</label>
+				<span th:text="${fecha}"></span><br><br>
+				<input type="hidden" name="fecha" id="fecha" class="form-control" th:value="${fecha}"/>
+			</div>
+			<div class="col-md-6">
+				<label>selecione un Cliente</label>
+				<select name="cliente" class="form-control">
+					<option th:each="c : ${cliente}" th:value="${c.id}" th:text="${c.nombre}"></option>
+				</select>
+			</div>
+		</div>
+		<br><br>
+		<hr>
+		</hr>
+		<br><br>
+		<h3>Seleccione su producto y agrelo para la compra</h3>
+		<div class="row">
+			<div class="col-md-4">
+				<label>selecione un producto</label>
+				<select id="producto" name="productoagregar" class="form-control" onchange="validarcantidad()">
+					<option>seleccione un producto</option>
+					<option th:each="p : ${producto}" th:value="${p.id}"><span th:text="${p.nombre}"></span> -
+						<span th:text="${p.valor}"></span> -
+						Disponible - <span th:text="${p.cantidad}"></span>
+					</option>
+				</select>
+			</div>
+			<div class="col-md-4">
+				<label>Cantidad del producto</label>
+				<input type="number" name="cantidadagregar" class="form-control" id="cantidad" />
+				<p class="alerta" id="alertacantidad"></p>
+			</div>
+			<div class="col-md-4">
+				<button type="button" onclick="agregarproducto()" class="btn btn-warning">Agregar Producto</button>
+			</div>
+		</div>
+
+		<div class="container">
+			<table class="table table-success" id="tablaproducto">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Nombre del producto</th>
+						<th>cantidad</th>
+						<th>precio unitario</th>
+						<th>precio total</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th>Total Factura</th>
+					<th id="totalfactura"></th>
+				</tr>
+			</table>
+		</div>
+		<br><br><br><br>
+		<input type="hidden" name="total" id="total" class="form-control" th:value="${total}"/>
+		<div class="centrarboton">
+			<input type="submit" value="Guardar Factura" class="btn btn-outline-success">
+		</div>
+	</form>
+</div>
+<script>
+
+
+    var contador = 0;
+    var totalfactura = 0;
+
+    function agregarproducto() {
+        contador++;
+        let cantidad = parseInt(document.getElementById('cantidad').value);
+        let nombreproducto = document.getElementById('producto').selectedOptions[0].text;
+        let idproducto = document.getElementById('producto').value;
+        let objetoproducto = nombreproducto.split("-");
+        let stockDisponible = parseInt(objetoproducto[3]);
+        let precioUnitario = parseInt(objetoproducto[1]);
+
+        if (stockDisponible >= cantidad) {
+            let precioTotal = cantidad * precioUnitario;
+            totalfactura += precioTotal;
+
+            let fila = document.getElementById('fila' + idproducto);
+            if (!fila) {
+                let nuevaFila = `
+                    <tr id='fila${idproducto}'>
+                        <td>${contador}</td>
+                        <td>${objetoproducto[0]}</td>
+                        <td id='idproducto${idproducto}'>${cantidad}</td>
+                        <td>${precioUnitario}</td>
+                        <td id='precioTotal${idproducto}'>${precioTotal}</td>
+                        <td><i onclick='borrarproducto(${idproducto}, ${precioTotal})' class='fa fa-trash' aria-hidden='true'></i></td>
+                        <input type='hidden' name='producto' value='${idproducto}'/>
+                        <input type='hidden' name='cantidad' value='${cantidad}'/>
+                    </tr>`;
+                document.querySelector('#tablaproducto tbody').insertAdjacentHTML('beforeend', nuevaFila);
+            } else {
+                let cantidadActual = parseInt(document.getElementById('idproducto' + idproducto).innerText);
+                let nuevaCantidad = cantidadActual + cantidad;
+                document.getElementById('idproducto' + idproducto).innerText = nuevaCantidad;
+                let nuevoPrecioTotal = nuevaCantidad * precioUnitario;
+                document.getElementById('precioTotal' + idproducto).innerText = nuevoPrecioTotal;
+                totalfactura += (nuevoPrecioTotal - (cantidadActual * precioUnitario));
+            }
+
+            document.getElementById('totalfactura').innerText = totalfactura;
+            document.getElementById('total').value = totalfactura;
+        } else {
+            mensajestock();
+        }
+    }
+
+	function borrarproducto(valor, precioTotal) {
+		$("#fila" + valor).remove();
+		totalfactura = parseInt(document.getElementById('totalfactura').innerHTML);
+		totalfactura -= precioTotal;
+		document.getElementById('totalfactura').innerHTML = totalfactura;
+	}
+
+	function validarcantidad() {
+		let nombreproducto = $('#producto option:selected').text();
+		let cantidad = nombreproducto.split("-")[3];
+		document.getElementById('alertacantidad').innerHTML = "stock del Producto: " + cantidad;
+	}
+
+	function mensajestock() {
+		Swal.fire({
+			icon: "error",
+			title: "error..",
+			text: "Something went wrong!",
+			footer: '<a href="#">Why do I have this issue?</a>'
+		});
+
+	}
+</script>
+
+
+<div th:insert="~{footer}"></div>

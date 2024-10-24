@@ -1,0 +1,41 @@
+<div th:insert="~{header}"></div>
+<h1>Listado de Productos</h1>
+<div class="container">
+	<table class="table table-success">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nombre Producto</th>
+				<th>Descripcion Producto</th>
+				<th>fecha Producto</th>
+				<th>valor Proveedor</th>
+				<th>cantidad Producto</th>
+				<th>proveedor del Producto</th>
+				<th>estado del Producto</th>
+				<th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="p:${producto}">
+				<td th:text="${p.id}"></td>
+				<td th:text="${p.nombre}"></td>
+				<td th:text="${p.descripcion}"></td>
+				<td th:text="${p.fecha}"></td>
+				<td th:text="${p.valor}"></td>
+				<td th:text="${p.cantidad}"></td>
+				<td th:text="${p.proveedor.nombre}"></td>
+				<td th:text="${p.estado}"></td>
+				<td>
+					<a th:href="|/Producto/deshabilitar/${p.id}|"><i class="fa fa-trash" aria-hidden="true"></i></a>
+				    <a th:href="|/Producto/actualizar/${p.id}|"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+  <a th:href="@{/Producto/inactivo}">
+            <button class="btn btn-primary centrarboton">Ver Inactivos</button>
+        </a>
+
+<div th:insert="~{footer}"></div>

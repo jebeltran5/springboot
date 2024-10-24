@@ -1,0 +1,57 @@
+<div th:insert="~{header}"></div>
+
+<h1>Formulario de Registro de un Producto</h1>
+
+<div class="card text-bg-success mb-3 centrarboton " style="max-width: 18rem;">
+	<div class="card-header"><span th:text="${producto.get().nombre}"></span></div>
+	<div class="card-body">
+		<h5 class="card-title"><span th:text="${producto.get().nombre}"></span></h5>
+		<p class="card-text">Cantidad:<span th:text="${producto.get().cantidad}"></span></p>
+		<p class="card-text">valor<span th:text="${producto.get().valor}"></span></p>
+		<p class="card-text">descripcion<span th:text="${producto.get().descripcion}"></span></p>
+	</div>
+</div>
+
+<div class="container">
+	<form th:action="@{/Producto/guardar} " th:object="${producto}" method="POST">
+		<div class="row">
+			<div class="col-md-6">
+				<input type="hidden" th:field="*{id}" required>
+				<input type="hidden" th:field="*{nombre}" id="nombre" class="form-control" required>
+			</div>
+			<div class="col-md-6">
+				<input type="hidden" th:field="*{descripcion}" id="descripcion" class="form-control" required>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<input type="hidden" th:field="*{valor}" id="valor" class="form-control" required>
+			</div>
+			<div class="col-md-3">
+				<input type="hidden" th:field="*{cantidad}" id="cantidad" class="form-control" required>
+			</div>
+			<div class="col-md-3">
+				<input type="hidden" th:field="*{fecha}" id="fecha" class="form-control" required>
+			</div>
+			<div class="col-md-3">
+				<input type="hidden" th:field="*{proveedor}" class="form-control" required>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+			</div>
+			<div class="col-md-6">
+				<label>selecciine un estado de producto</label>
+				<select th:field="*{estado}" class="form-control" required>
+					<option value="Activo">Activo</option>
+					<option value="Inactivo">Inactivo</option>
+				</select>
+			</div>
+			<div class="col-md-3">
+			</div>
+			<br><br><br><br>
+			<div class="centrarboton">
+				<input type="submit" value="Actualizar Producto" class="btn btn-outline-success">
+			</div>
+	</form>
+	<div th:insert="~{footer}"></div>

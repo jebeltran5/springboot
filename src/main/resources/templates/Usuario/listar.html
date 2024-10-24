@@ -1,0 +1,67 @@
+<div th:insert="~{header}"></div>
+
+<h1>Listado de Usuario</h1>
+<div class="container">
+	<table class="table table-success">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nombre del usuario</th>
+				<th>Correo Electronico del Usuario</th>
+				<th>Rol Cliente</th>
+				<th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="u:${usuario}">
+				<td th:text="${u.id}"></td>
+				<td th:text="${u.nombre}"></td>
+				<td th:text="${u.email}"></td>
+				<td th:text="${u.rol}"></td>
+				<td>
+					<!--		<a th:href="|/Proveedor/borrar/${p.id}|"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+					<a th:href="|/Usuario/actualizar/${u.id}|"><i class="fa fa-pencil-square-o"
+							aria-hidden="true"></i></a>
+					<i th:onclick="borrar('[[${u.id}]]')" class="fa fa-trash" aria-hidden="true"></i>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<script>
+	function borrar(id) {
+		const swalWithBootstrapButtons = Swal.mixin({
+			customClass: {
+				confirmButton: "btn btn-success",
+				cancelButton: "btn btn-danger"
+			},
+			buttonsStyling: false
+		});
+		swalWithBootstrapButtons.fire({
+			title: "esta seguro que desea borrar este usuario",
+			text: "si se borra no podra recuperar el registro",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonText: "borrar usuario!",
+			cancelButtonText: "cancelar accion!",
+			reverseButtons: true
+		}).then((result) => {
+			if (result.isConfirmed) {
+			      //Redireccion
+			   location.href = "/Usuario/borrar/" + id;
+			      
+			} else if (
+				/* Read more about handling dismissals below */
+				result.dismiss === Swal.DismissReason.cancel
+			) {
+				swalWithBootstrapButtons.fire({
+					title: "Cancelado",
+					text: "el registro no sera borrado :)",
+					icon: "error"
+				});
+			}
+		});
+	}
+</script>
+<div th:insert="~{footer}"></div>

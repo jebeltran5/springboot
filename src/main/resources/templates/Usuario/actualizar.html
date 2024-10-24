@@ -1,0 +1,37 @@
+<div th:insert="~{header}"></div>
+
+<h1>Formulario de Actualizar un usuario</h1>
+<div class="container">
+	<form th:action="@{/Usuario/guardar} " th:object="${usuario}" method="POST">
+		<div class="row">
+			<div class="col-md-6">
+				<label>nombre de usuario</label>
+				<input type="hidden" th:field="*{id}" id="id" required>
+				<input type="text" th:field="*{nombre}" id="nombre" class="form-control" required>
+			</div>
+			<div class="col-md-6">
+            <label>Correo Electronico</label>
+				<input type="email" th:field="*{email}" id="email" class="form-control" required>
+			</div>
+			
+				<div class="row">
+			<div class="col-md-6">
+				<label>Contraseña del usuario</label>
+				<input type="password" th:field="*{password}" id="password" class="form-control" required>
+			</div>
+			<div class="col-md-6">
+            <label>Rol</label>
+				<select th:field="*{rol}" id="rol" class="form-control">
+					<option value="Administrador">Administrador</option>
+					<option value="Vendedor">Vendedor</option>
+				</select>
+			</div>
+		</div><br><br><br><br>
+		<div class="centrarboton">
+		<input type="submit" value="Actualizar Usuario" class="btn btn-outline-success">
+		</div>
+	</form>
+</div>
+
+
+<div th:insert="~{footer}"></div>

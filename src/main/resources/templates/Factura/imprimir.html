@@ -1,0 +1,73 @@
+<div th:insert="~{header}"></div>
+
+<h1>Factura Numero: <span th:text="${id}"></span> Con Fecha: <span th:text="${#dates.format(fecha, 'yyyy-MM-dd')}"></span></h1>
+<div class="container">
+	<table class="table table-success" id="tablaproducto">
+		<thead>
+			<tr>
+				<th>Nombre Producto</th>
+				<th>Cantidad</th>
+				<th>Precio Unitario</th>
+				<th>Precio Total</th>
+			</tr>
+		</thead>
+		<tbody>
+			   <tr th:each="p : ${productos}">
+                <td th:text="${p.producto.nombre}"></td>
+                <td th:text="${p.cantidad}"></td>
+                <td th:text="${p.producto.valor}"></td>
+                <td th:text="${p.cantidad * p.producto.valor}"></td>
+            </tr>
+			<tr>
+				
+				
+				<td colspan="3" style="text-align: right;">Total Factura</td>
+                <td id="totalfactura">valor</td>
+			</tr>
+		</tbody>
+	</table>
+	<button type="button" class="btn btn-success centrarboton" onclick="generatePDF()">Imprimir Factura</button>
+</div>
+
+<script th:incline="javascript">
+	
+	document.addEventListener("DOMContentLoaded", function() {
+        let total = 0;
+        const rows = document.querySelectorAll("tbody tr");
+        
+        rows.forEach((row, index) => {
+            if (index < rows.length - 1) {
+                const cantidad = parseInt(row.children[1].innerText);
+                const valor = parseFloat(row.children[2].innerText);
+                total += cantidad * valor;
+            }
+        });
+
+        document.getElementById("totalfactura").innerText = total.toFixed(2);
+    });
+    
+    
+    function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p','mm', 'a3');
+        var niceimage = new Image();
+        niceimage.src= 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRooQKM0IX7xcuJaOmr6bXyeSEvxryyyowBrKH4CmMKPxSJB_7151k7C3E9gIAeq9FFUjA&usqp=CAU';
+        doc.addImage(niceimage, 'PNG', 0,0);
+        jsPDF.autoTableSetDefaults(
+		{
+			headStyles: { fillColor: [253,0,0]}
+			},
+			doc
+		)
+		
+		doc.autoTable({
+			startY: 120,
+			html: '#tablaproducto'
+		})
+      
+        doc.save('factura.pdf');
+    }
+            
+</script>
+
+<div th:insert="~{footer}"></div>
