@@ -30,7 +30,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/Cliente/listar", true) 
+                .defaultSuccessUrl("/dashboard", true) 
                 .permitAll()
             )
             .logout(logout -> logout
